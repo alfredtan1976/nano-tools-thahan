@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CountDownทหาร | คำนวณวันปลดทหารไทย</title>
+    <meta
+      name="description"
+      content="คำนวณวันปลดทหารไทย ผลัด 1 ผลัด 2 สมัครใจ จับใบแดง วุฒิปริญญาตรี และ รด. พร้อมนับถอยหลังวันปลดทหารแบบเรียลไทม์"
+    />
+    <meta
+      name="keywords"
+      content="คำนวณวันปลดทหาร, ทหารเกณฑ์ ผลัด 1 ปลดวันไหน, ลดวันรับราชการทหาร, วิธีนับวันปลดทหาร, แฟนทหาร, วันปลดทหาร"
+    />
+    <link rel="canonical" href="https://thahan.nano-tools.net/" />
+    <meta property="og:title" content="CountDownทหาร | คำนวณวันปลดทหารไทย" />
+    <meta
+      property="og:description"
+      content="เครื่องมือนับถอยหลังวันปลดทหารไทยสำหรับทหารเกณฑ์และแฟนทหาร"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://thahan.nano-tools.net/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">ThaiGoondori · กุนโดริไทย</p>
+        <h1>CountDownทหาร</h1>
+        <p class="tagline">นับถอยหลังวันปลดประจำการ สำหรับทหารเกณฑ์และแฟนทหาร</p>
+      </div>
+      <div class="header-actions">
+        <button class="language-toggle" id="languageToggle" type="button" aria-label="Language switch">TH / EN</button>
+        <button class="ghost-button" id="resetButton" type="button" hidden>คำนวณใหม่</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="ad-slot ad-top" aria-label="พื้นที่โฆษณา"></div>
+
+      <section class="calculator-section" id="calculatorSection">
+        <div class="section-heading">
+          <p class="eyebrow">The Selector</p>
+          <h2>เลือกข้อมูลเพื่อคำนวณวันปลด</h2>
+        </div>
+
+        <form id="serviceForm" class="service-form">
+          <label>
+            <span>เหล่าทัพ</span>
+            <select id="branch" name="branch">
+              <option value="army">ทหารบก</option>
+              <option value="navy">ทหารเรือ</option>
+              <option value="airforce">ทหารอากาศ</option>
+            </select>
+          </label>
+
+          <label>
+            <span>ผลัด / วันที่เข้า</span>
+            <select id="batch" name="batch"></select>
+          </label>
+
+          <label>
+            <span>ปีที่เข้าประจำการ</span>
+            <input id="entryYear" name="entryYear" type="number" min="2020" max="2035" />
+          </label>
+
+          <label>
+            <span>รูปแบบการเข้า</span>
+            <select id="entryType" name="entryType">
+              <option value="lottery">จับไพ่แดง / ใบแดง</option>
+              <option value="volunteer">สมัครใจ</option>
+            </select>
+          </label>
+
+          <label>
+            <span>วุฒิการศึกษา / รด.</span>
+            <select id="education" name="education">
+              <option value="basic">มัธยม / ไม่มีสิทธิลดหย่อน</option>
+              <option value="degree">อนุปริญญา / ปริญญาตรี</option>
+              <option value="rordor2">จบ รด. ปี 2</option>
+              <option value="rordor3">จบ รด. ปี 3 ขึ้นไป</option>
+            </select>
+            <small class="field-note">ต้องยื่นวุฒิในวันตรวจเลือกเท่านั้น / 必须在征兵现场提交毕业证书方可生效</small>
+          </label>
+
+          <label class="special-case">
+            <input id="specialCase" name="specialCase" type="checkbox" />
+            <span>
+              กรณีพิเศษ / ขาดทหาร
+              <small>หนีทหาร ขาดตรวจเลือก หรือมารายงานตัวช้า อาจถูกนับ 2 ปี และใช้สิทธิลดหย่อนไม่ได้</small>
+            </span>
+          </label>
+
+          <label>
+            <span>วันเงินเดือนออก</span>
+            <select id="payday" name="payday">
+              <option value="25">ทุกวันที่ 25</option>
+              <option value="26">ทุกวันที่ 26</option>
+              <option value="27">ทุกวันที่ 27</option>
+              <option value="28">ทุกวันที่ 28</option>
+              <option value="30">ทุกวันที่ 30</option>
+            </select>
+          </label>
+
+          <label>
+            <span>วันลา / วันที่รอคอย</span>
+            <input id="leaveDate" name="leaveDate" type="date" />
+          </label>
+
+          <label class="remember-option">
+            <input id="rememberInfo" name="rememberInfo" type="checkbox" />
+            <span>
+              บันทึกข้อมูลของฉัน
+              <small>เปิดครั้งถัดไปจะแสดงหน้าดาวน์บอร์ดทันที / 记住我的信息</small>
+            </span>
+          </label>
+
+          <button class="primary-button" type="submit">เริ่มนับถอยหลัง</button>
+        </form>
+
+        <div class="ad-slot ad-native" aria-label="พื้นที่โฆษณา"></div>
+      </section>
+
+      <section class="dashboard-section" id="dashboardSection" hidden>
+        <div class="hero-countdown">
+          <p class="eyebrow" id="serviceLabel">วันปลดประจำการ</p>
+          <h2 id="daysLeft">000 วัน</h2>
+          <p id="timeLeft">00 ชั่วโมง 00 นาที 00 วินาที</p>
+        </div>
+
+        <div class="ad-slot ad-mrec" aria-label="พื้นที่โฆษณา"></div>
+
+        <div class="progress-area">
+          <div class="progress-copy">
+            <span>รับราชการแล้ว</span>
+            <strong id="servedPercent">0.00000%</strong>
+          </div>
+          <div class="progress-bar" aria-label="ความคืบหน้าการรับราชการ">
+            <div id="progressFill"></div>
+          </div>
+          <div class="progress-copy muted">
+            <span id="elapsedLabel">ผ่านไป 0 วัน</span>
+            <span id="remainingLabel">เหลือ 0 วัน</span>
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <article>
+            <span>ยศตอนนี้</span>
+            <strong id="rankLabel">พลทหารใหม่</strong>
+          </article>
+          <article>
+            <span>วันเงินเดือนออก</span>
+            <strong id="paydayLabel">-</strong>
+          </article>
+          <article>
+            <span>วันลาที่รอ</span>
+            <strong id="leaveLabel">ยังไม่ได้ตั้ง</strong>
+          </article>
+        </div>
+
+        <div class="actions">
+          <button class="primary-button" id="shareCardButton" type="button">สร้างรูปแชร์</button>
+          <button class="secondary-button" id="saveFavoriteButton" type="button">บันทึกไว้ให้แฟนทหารดู</button>
+        </div>
+
+        <canvas id="shareCanvas" width="1080" height="1350" hidden></canvas>
+        <a id="downloadCard" class="download-link" download="countdown-thahan.png" hidden>ดาวน์โหลดรูปแชร์</a>
+      </section>
+
+      <section class="seo-section" id="seoSection">
+        <div class="section-heading">
+          <p class="eyebrow">Guide 2026</p>
+          <h2>คู่มือสั้นสำหรับทหารเกณฑ์และครอบครัว</h2>
+        </div>
+        <article>
+          <h3>คำนวณวันปลดทหาร ต้องดูอะไรบ้าง?</h3>
+          <p>
+            ปัจจัยหลักคือเหล่าทัพ ผลัดที่เข้าประจำการ รูปแบบการเข้าเป็นทหาร และสิทธิลดหย่อนจากวุฒิการศึกษาหรือ รด.
+            สิทธิลดหย่อนจากวุฒิการศึกษาต้องยื่นในวันตรวจเลือกเท่านั้น เครื่องมือนี้ช่วยนับวันแบบง่าย
+            แต่วันจริงควรตรวจสอบกับหน่วยหรือเอกสารราชการอีกครั้ง
+          </p>
+        </article>
+        <article>
+          <h3>ทหารเกณฑ์แต่ละผลัดเริ่มวันไหน?</h3>
+          <p>
+            ทหารบกและทหารอากาศโดยทั่วไปมี ผลัด 1 วันที่ 1 พฤษภาคม และ ผลัด 2 วันที่ 1 พฤศจิกายน
+            ส่วนทหารเรือมี 4 ผลัด คือ 1 พฤษภาคม, 1 สิงหาคม, 1 พฤศจิกายน และ 1 กุมภาพันธ์
+          </p>
+        </article>
+        <article>
+          <h3>กรณีขาดทหารหรือมารายงานตัวช้า</h3>
+          <p>
+            ผู้ที่ขาดตรวจเลือก หนีทหาร หรือเข้าเงื่อนไขพิเศษบางกรณี อาจถูกบังคับรับราชการ 2 ปี
+            และไม่สามารถใช้สิทธิลดหย่อนจากวุฒิการศึกษาได้ ควรสอบถามสัสดีหรือหน่วยงานราชการโดยตรง
+          </p>
+        </article>
+        <article>
+          <h3>แฟนทหารใช้เว็บนี้ยังไง?</h3>
+          <p>
+            เลือกข้อมูลของแฟนครั้งเดียว กดบันทึก แล้วเปิดจากหน้าจอโทรศัพท์เพื่อดูจำนวนวันที่เหลือได้ทุกวัน
+            เหมาะกับคนที่อยากนับถอยหลังไปด้วยกัน
+          </p>
+        </article>
+      </section>
+
+      <section class="blog-section" id="blogSection">
+        <div class="section-heading">
+          <p class="eyebrow">Blog</p>
+          <h2>บทความแนะนำสำหรับเกณฑ์ทหาร 2026</h2>
+        </div>
+        <div class="blog-grid">
+          <a class="blog-card" href="blog.html#service-reduction">
+            <span>Guide</span>
+            <h3>สรุปครบ! เกณฑ์ทหาร 2026: วิธีลดวันรับราชการทหาร</h3>
+            <p>วุฒิการศึกษา สิทธิ รด. และข้อควรระวังเรื่องการยื่นเอกสารในวันตรวจเลือก</p>
+          </a>
+          <a class="blog-card" href="blog.html#discharge-date">
+            <span>Countdown</span>
+            <h3>ทหารเกณฑ์ ผลัด 1 และ ผลัด 2 ปลดวันไหน?</h3>
+            <p>วิธีนับวันปลดประจำการที่ถูกต้อง พร้อมตัวอย่าง 6 เดือน 1 ปี และ 2 ปี</p>
+          </a>
+          <a class="blog-card" href="blog.html#military-documents">
+            <span>Documents</span>
+            <h3>เอกสาร สด.9, สด.35 และ สด.43 คืออะไร?</h3>
+            <p>เอกสารสำคัญที่ชายไทยต้องรู้ก่อนรายงานตัวและหลังผ่านการตรวจเลือก</p>
+          </a>
+          <a class="blog-card" href="blog.html#salary-benefits">
+            <span>Benefits</span>
+            <h3>เงินเดือนทหารเกณฑ์ 2026 ได้เท่าไหร่?</h3>
+            <p>สรุปเงินเดือน เบี้ยเลี้ยง และสิทธิประโยชน์ที่ทหารเกณฑ์ควรรู้</p>
+          </a>
+          <a class="blog-card" href="blog.html#postponement-health">
+            <span>Rights</span>
+            <h3>วิธีขอผ่อนผันเกณฑ์ทหารสำหรับนักศึกษา</h3>
+            <p>เงื่อนไขผ่อนผัน เอกสารนักศึกษา และโรคที่อาจได้รับการยกเว้น</p>
+          </a>
+          <a class="blog-card" href="blog.html#lgbtq-guide">
+            <span>LGBTQ+</span>
+            <h3>คู่มือเกณฑ์ทหารสำหรับ LGBTQ+ และสาวประเภทสอง</h3>
+            <p>การเตรียมเอกสาร การคุ้มครองสิทธิ และขั้นตอนในวันตรวจเลือก</p>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <aside class="sticky-ad" aria-label="พื้นที่โฆษณา"></aside>
+
+    <div class="share-modal" id="shareModal" hidden role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="share-modal-panel">
+        <button class="modal-close" id="closeShareModal" type="button" aria-label="Close">×</button>
+        <h2 id="shareModalTitle">รูปแชร์วันปลด</h2>
+        <p class="share-save-tip">กดค้างที่รูปภาพเพื่อบันทึกหรือแชร์ให้เพื่อน</p>
+        <img id="sharePreview" alt="รูปแชร์นับถอยหลังวันปลดทหาร" />
+        <a id="downloadCardModal" class="download-link fallback-download" download="countdown-thahan.png">ดาวน์โหลดรูป PNG</a>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>
+        CountDownทหาร เป็นเครื่องมือดิจิทัลสำหรับช่วยคำนวณและนับถอยหลังวันปลดทหารไทย
+        เว็บไซต์: <a href="https://thahan.nano-tools.net/">thahan.nano-tools.net</a>
+      </p>
+      <nav aria-label="ลิงก์ข้อมูลเว็บไซต์">
+        <a href="privacy.html">นโยบายความเป็นส่วนตัว / Privacy Policy</a>
+        <a href="terms.html">ข้อกำหนดการใช้งาน / Terms</a>
+        <a href="about.html">เกี่ยวกับเรา / About Us</a>
+        <a href="contact.html">ติดต่อเรา / Contact Us</a>
+        <a href="blog.html">บทความ / Blog</a>
+      </nav>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

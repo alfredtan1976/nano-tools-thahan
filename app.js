@@ -336,6 +336,54 @@ function restoreState() {
   }
 }
 
+function setCanvasFont(ctx, weight, size) {
+  const family = pageLang === "en" ? "Arial, Helvetica, sans-serif" : "system-ui, sans-serif";
+  ctx.font = `${weight} ${size}px ${family}`;
+}
+
+function drawFittedText(ctx, text, x, y, maxWidth, weight, size, minSize = 24) {
+  let currentSize = size;
+  setCanvasFont(ctx, weight, currentSize);
+  while (ctx.measureText(text).width > maxWidth && currentSize > minSize) {
+    currentSize -= 2;
+    setCanvasFont(ctx, weight, currentSize);
+  }
+  ctx.fillText(text, x, y);
+  return currentSize;
+}
+
+function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, weight, size, maxLines = 2) {
+  setCanvasFont(ctx, weight, size);
+  const words = text.split(" ");
+  const lines = [];
+  let line = "";
+
+  for (const word of words) {
+    const testLine = line ? `${line} ${word}` : word;
+    if (ctx.measureText(testLine).width <= maxWidth || !line) {
+      line = testLine;
+    } else {
+      lines.push(line);
+      line = word;
+    }
+  }
+  if (line) lines.push(line);
+
+  const visibleLines = lines.slice(0, maxLines);
+  if (lines.length > maxLines) {
+    let last = visibleLines[visibleLines.length - 1];
+    while (ctx.measureText(`${last}...`).width > maxWidth && last.length > 0) {
+      last = last.slice(0, -1);
+    }
+    visibleLines[visibleLines.length - 1] = `${last}...`;
+  }
+
+  visibleLines.forEach((visibleLine, index) => {
+    ctx.fillText(visibleLine, x, y + index * lineHeight);
+  });
+  return visibleLines.length;
+}
+
 function drawShareCard() {
   if (!currentResult) return;
 
@@ -362,47 +410,37 @@ function drawShareCard() {
   ctx.fill();
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "800 54px system-ui, sans-serif";
-  ctx.fillText(t.shareTitle, 86, 128);
-  ctx.font = "600 34px system-ui, sans-serif";
+  drawFittedText(ctx, t.shareTitle, 86, 128, 680, "800", 54, 34);
   ctx.fillStyle = "#aee6d0";
-  ctx.fillText(`${branchNames[currentResult.branch]} · ${currentResult.batch.label}`, 86, 184);
+  drawWrappedText(ctx, `${branchNames[currentResult.branch]} · ${currentResult.batch.label}`, 86, 184, 760, 42, "600", 34, 2);
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 154px system-ui, sans-serif";
-  ctx.fillText(currentResult.serviceMonths === 0 ? t.shareExempt : `${remainingDays}`, 86, 440);
-  ctx.font = "800 56px system-ui, sans-serif";
-  ctx.fillText(currentResult.serviceMonths === 0 ? t.shareExemptNote : t.shareDaysToDischarge, 96, 520);
+  drawFittedText(ctx, currentResult.serviceMonths === 0 ? t.shareExempt : `${remainingDays}`, 86, 440, 720, "900", 154, 82);
+  drawFittedText(ctx, currentResult.serviceMonths === 0 ? t.shareExemptNote : t.shareDaysToDischarge, 96, 520, 870, "800", 56, 34);
 
   ctx.fillStyle = "rgba(255,255,255,0.18)";
   ctx.fillRect(86, 660, 908, 44);
   ctx.fillStyle = "#f4b942";
   ctx.fillRect(86, 660, 908 * (percent / 100), 44);
   ctx.fillStyle = "#ffffff";
-  ctx.font = "800 46px system-ui, sans-serif";
-  ctx.fillText(`${t.shareServed} ${percent.toFixed(5)}%`, 86, 790);
+  drawFittedText(ctx, `${t.shareServed} ${percent.toFixed(5)}%`, 86, 790, 908, "800", 46, 28);
 
-  ctx.font = "600 34px system-ui, sans-serif";
   ctx.fillStyle = "#d8f3e9";
-  ctx.fillText(`${t.shareStart}: ${formatThaiDate(currentResult.startDate)}`, 86, 890);
-  ctx.fillText(`${t.shareEnd}: ${formatThaiDate(currentResult.endDate)}`, 86, 946);
-  ctx.fillText(`${t.shareRight}: ${currentResult.specialCase ? t.specialShare : educationNames[currentResult.education]}`, 86, 1002);
+  drawFittedText(ctx, `${t.shareStart}: ${formatThaiDate(currentResult.startDate)}`, 86, 890, 908, "600", 34, 24);
+  drawFittedText(ctx, `${t.shareEnd}: ${formatThaiDate(currentResult.endDate)}`, 86, 946, 908, "600", 34, 24);
+  drawFittedText(ctx, `${t.shareRight}: ${currentResult.specialCase ? t.specialShare : educationNames[currentResult.education]}`, 86, 1002, 908, "600", 34, 22);
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "800 38px system-ui, sans-serif";
-  ctx.fillText(t.shareLove, 86, 1126);
-  ctx.font = "600 28px system-ui, sans-serif";
+  drawFittedText(ctx, t.shareLove, 86, 1126, 908, "800", 38, 24);
   ctx.fillStyle = "#aee6d0";
-  ctx.fillText(t.shareDisclaimer, 86, 1182);
+  drawFittedText(ctx, t.shareDisclaimer, 86, 1182, 908, "600", 28, 19);
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
   ctx.fillRect(86, 1236, 908, 70);
   ctx.fillStyle = "#ffffff";
-  ctx.font = "800 32px system-ui, sans-serif";
-  ctx.fillText(t.shareUrlLabel, 116, 1280);
+  drawFittedText(ctx, t.shareUrlLabel, 116, 1280, 390, "800", 32, 22);
   ctx.fillStyle = "#f4b942";
-  ctx.font = "900 34px system-ui, sans-serif";
-  ctx.fillText(siteUrl.replace("https://", ""), 522, 1280);
+  drawFittedText(ctx, siteUrl.replace("https://", ""), 522, 1280, 430, "900", 34, 22);
 
   const imageUrl = shareCanvas.toDataURL("image/png");
   downloadCard.href = imageUrl;

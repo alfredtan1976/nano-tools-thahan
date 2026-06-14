@@ -457,6 +457,9 @@ shareModal.addEventListener("click", (event) => {
 });
 
 languageToggle.addEventListener("click", () => {
+  if (languageToggle.tagName === "A") {
+    return;
+  }
   if (languageToggle.dataset.href) {
     window.location.href = languageToggle.dataset.href;
     return;

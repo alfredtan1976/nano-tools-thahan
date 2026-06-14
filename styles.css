@@ -60,6 +60,9 @@ select {
 }
 
 .language-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 32px;
   padding: 0 10px;
   color: var(--primary-strong);
@@ -68,6 +71,7 @@ select {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
+  text-decoration: none;
   cursor: pointer;
 }
 

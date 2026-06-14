@@ -1,34 +1,126 @@
-const branchNames = {
-  army: "ทหารบก",
-  navy: "ทหารเรือ",
-  airforce: "ทหารอากาศ",
+const siteUrl = "https://thahan.nano-tools.net";
+const pageLang = document.documentElement.lang === "en" || document.body.dataset.lang === "en" ? "en" : "th";
+
+const copy = {
+  th: {
+    locale: "th-TH",
+    branchNames: {
+      army: "ทหารบก",
+      navy: "ทหารเรือ",
+      airforce: "ทหารอากาศ",
+    },
+    batches: {
+      p1May: "ผลัด 1 · 1 พฤษภาคม",
+      p2Nov: "ผลัด 2 · 1 พฤศจิกายน",
+      p2Aug: "ผลัด 2 · 1 สิงหาคม",
+      p3Nov: "ผลัด 3 · 1 พฤศจิกายน",
+      p4Feb: "ผลัด 4 · 1 กุมภาพันธ์",
+    },
+    educationNames: {
+      basic: "มัธยม / ไม่มีสิทธิลดหย่อน",
+      degree: "อนุปริญญา / ปริญญาตรี",
+      rordor2: "จบ รด. ปี 2",
+      rordor3: "จบ รด. ปี 3 ขึ้นไป",
+    },
+    day: "วัน",
+    exempt: "ได้รับการยกเว้น",
+    exemptNote: "จบ รด. ปี 3 ขึ้นไป โปรดตรวจสอบเอกสารกับสัสดี",
+    timeParts: ["ชั่วโมง", "นาที", "วินาที"],
+    elapsed: "ผ่านไป",
+    remaining: "เหลือ",
+    rank: ["พลทหารใหม่", "พลทหาร", "พลทหารอาวุโส", "ใกล้ปลดประจำการ"],
+    paydayPrefix: "",
+    leavePast: "วันลาผ่านไปแล้ว",
+    leaveUnset: "ยังไม่ได้ตั้ง",
+    discharge: "ปลด",
+    specialRule: "กรณีพิเศษ / ขาดทหาร · บังคับนับ 2 ปี",
+    specialShare: "กรณีพิเศษ / ขาดทหาร · นับ 2 ปี",
+    saved: "บันทึกแล้ว เปิดดูได้ทุกวัน",
+    saveButton: "บันทึกไว้ให้แฟนทหารดู",
+    download: "ดาวน์โหลดรูปแชร์ PNG",
+    shareTitle: "CountDownทหาร",
+    shareExempt: "ยกเว้น",
+    shareExemptNote: "โปรดตรวจสอบเอกสาร",
+    shareDaysToDischarge: "วันถึงปลดประจำการ",
+    shareServed: "รับราชการแล้ว",
+    shareStart: "เข้า",
+    shareEnd: "ปลด",
+    shareRight: "สิทธิ",
+    shareLove: "บันทึกไว้ให้แฟนทหารดู แล้วนับไปด้วยกัน",
+    shareDisclaimer: "วันจริงควรตรวจสอบกับหน่วยหรือเอกสารราชการอีกครั้ง",
+    shareUrlLabel: "คำนวณวันปลดทหารได้ที่",
+  },
+  en: {
+    locale: "en-US",
+    branchNames: {
+      army: "Royal Thai Army",
+      navy: "Royal Thai Navy",
+      airforce: "Royal Thai Air Force",
+    },
+    batches: {
+      p1May: "Batch 1 · May 1",
+      p2Nov: "Batch 2 · November 1",
+      p2Aug: "Batch 2 · August 1",
+      p3Nov: "Batch 3 · November 1",
+      p4Feb: "Batch 4 · February 1",
+    },
+    educationNames: {
+      basic: "High school or lower / no reduction",
+      degree: "Diploma / bachelor's degree",
+      rordor2: "Completed Ror Dor year 2",
+      rordor3: "Completed Ror Dor year 3+",
+    },
+    day: "days",
+    exempt: "Exempt",
+    exemptNote: "Ror Dor year 3+ is usually exempt. Please verify with the recruiting office.",
+    timeParts: ["hours", "minutes", "seconds"],
+    elapsed: "Elapsed",
+    remaining: "Remaining",
+    rank: ["New conscript", "Conscript", "Senior conscript", "Close to discharge"],
+    paydayPrefix: "",
+    leavePast: "Leave date has passed",
+    leaveUnset: "Not set",
+    discharge: "Discharge",
+    specialRule: "Special case / absent from draft · forced 2-year service",
+    specialShare: "Special case / absent from draft · 2 years",
+    saved: "Saved. Open this site anytime.",
+    saveButton: "Save for my partner/family",
+    download: "Download PNG",
+    shareTitle: "Thai Military Countdown",
+    shareExempt: "Exempt",
+    shareExemptNote: "Please verify documents",
+    shareDaysToDischarge: "days to discharge",
+    shareServed: "Service completed",
+    shareStart: "Start",
+    shareEnd: "End",
+    shareRight: "Status",
+    shareLove: "Save it and count down together",
+    shareDisclaimer: "Verify official dates with your unit or documents",
+    shareUrlLabel: "Calculate your discharge date at",
+  },
 };
 
-const siteUrl = "https://thahan.nano-tools.net";
+const t = copy[pageLang];
+const branchNames = t.branchNames;
 
 const batchOptions = {
   army: [
-    { value: "p1", label: "ผลัด 1 · 1 พฤษภาคม", month: 4, day: 1 },
-    { value: "p2", label: "ผลัด 2 · 1 พฤศจิกายน", month: 10, day: 1 },
+    { value: "p1", label: t.batches.p1May, month: 4, day: 1 },
+    { value: "p2", label: t.batches.p2Nov, month: 10, day: 1 },
   ],
   navy: [
-    { value: "p1", label: "ผลัด 1 · 1 พฤษภาคม", month: 4, day: 1 },
-    { value: "p2", label: "ผลัด 2 · 1 สิงหาคม", month: 7, day: 1 },
-    { value: "p3", label: "ผลัด 3 · 1 พฤศจิกายน", month: 10, day: 1 },
-    { value: "p4", label: "ผลัด 4 · 1 กุมภาพันธ์", month: 1, day: 1 },
+    { value: "p1", label: t.batches.p1May, month: 4, day: 1 },
+    { value: "p2", label: t.batches.p2Aug, month: 7, day: 1 },
+    { value: "p3", label: t.batches.p3Nov, month: 10, day: 1 },
+    { value: "p4", label: t.batches.p4Feb, month: 1, day: 1 },
   ],
   airforce: [
-    { value: "p1", label: "ผลัด 1 · 1 พฤษภาคม", month: 4, day: 1 },
-    { value: "p2", label: "ผลัด 2 · 1 พฤศจิกายน", month: 10, day: 1 },
+    { value: "p1", label: t.batches.p1May, month: 4, day: 1 },
+    { value: "p2", label: t.batches.p2Nov, month: 10, day: 1 },
   ],
 };
 
-const educationNames = {
-  basic: "มัธยม / ไม่มีสิทธิลดหย่อน",
-  degree: "อนุปริญญา / ปริญญาตรี",
-  rordor2: "จบ รด. ปี 2",
-  rordor3: "จบ รด. ปี 3 ขึ้นไป",
-};
+const educationNames = t.educationNames;
 
 const form = document.querySelector("#serviceForm");
 const branchSelect = document.querySelector("#branch");
@@ -67,7 +159,7 @@ function pad(number) {
 }
 
 function formatThaiDate(date) {
-  return new Intl.DateTimeFormat("th-TH", {
+  return new Intl.DateTimeFormat(t.locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -75,7 +167,7 @@ function formatThaiDate(date) {
 }
 
 function pluralDays(days) {
-  return `${Math.max(0, Math.ceil(days)).toLocaleString("th-TH")} วัน`;
+  return `${Math.max(0, Math.ceil(days)).toLocaleString(t.locale)} ${t.day}`;
 }
 
 function fillBatchOptions() {
@@ -104,11 +196,11 @@ function getServiceMonths(entryType, education, specialCase) {
 }
 
 function getRankLabel(monthsServed, totalMonths) {
-  if (totalMonths === 0) return "ได้รับการยกเว้น";
-  if (monthsServed < 3) return "พลทหารใหม่";
-  if (monthsServed < 12) return "พลทหาร";
-  if (monthsServed < 18) return "พลทหารอาวุโส";
-  return "ใกล้ปลดประจำการ";
+  if (totalMonths === 0) return t.exempt;
+  if (monthsServed < 3) return t.rank[0];
+  if (monthsServed < 12) return t.rank[1];
+  if (monthsServed < 18) return t.rank[2];
+  return t.rank[3];
 }
 
 function getNextPayday(dayOfMonth, now) {
@@ -154,24 +246,24 @@ function updateDashboard() {
   const nextPayday = getNextPayday(Number(currentResult.payday), now);
   const paydayDays = Math.ceil((nextPayday - now) / 86400000);
 
-  daysLeftEl.textContent = serviceMonths === 0 ? "ได้รับการยกเว้น" : `${remainingDays.toLocaleString("th-TH")} วัน`;
+  daysLeftEl.textContent = serviceMonths === 0 ? t.exempt : `${remainingDays.toLocaleString(t.locale)} ${t.day}`;
   timeLeftEl.textContent =
     serviceMonths === 0
-      ? "จบ รด. ปี 3 ขึ้นไป โปรดตรวจสอบเอกสารกับสัสดี"
-      : `${pad(hours)} ชั่วโมง ${pad(minutes)} นาที ${pad(seconds)} วินาที`;
+      ? t.exemptNote
+      : `${pad(hours)} ${t.timeParts[0]} ${pad(minutes)} ${t.timeParts[1]} ${pad(seconds)} ${t.timeParts[2]}`;
   servedPercentEl.textContent = `${percent.toFixed(5)}%`;
   progressFill.style.width = `${Math.min(percent, 100)}%`;
-  elapsedLabel.textContent = `ผ่านไป ${elapsedDays.toLocaleString("th-TH")} วัน`;
-  remainingLabel.textContent = `เหลือ ${remainingDays.toLocaleString("th-TH")} วัน`;
+  elapsedLabel.textContent = `${t.elapsed} ${elapsedDays.toLocaleString(t.locale)} ${t.day}`;
+  remainingLabel.textContent = `${t.remaining} ${remainingDays.toLocaleString(t.locale)} ${t.day}`;
   rankLabel.textContent = getRankLabel(monthsServed, serviceMonths);
   paydayLabel.textContent = `${pluralDays(paydayDays)} · ${formatThaiDate(nextPayday)}`;
 
   if (currentResult.leaveDate) {
     const leaveDays = Math.ceil((currentResult.leaveDate - now) / 86400000);
     leaveLabel.textContent =
-      leaveDays >= 0 ? `${pluralDays(leaveDays)} · ${formatThaiDate(currentResult.leaveDate)}` : "วันลาผ่านไปแล้ว";
+      leaveDays >= 0 ? `${pluralDays(leaveDays)} · ${formatThaiDate(currentResult.leaveDate)}` : t.leavePast;
   } else {
-    leaveLabel.textContent = "ยังไม่ได้ตั้ง";
+    leaveLabel.textContent = t.leaveUnset;
   }
 }
 
@@ -210,7 +302,7 @@ function showDashboard(result, saveMode = "auto") {
     localStorage.removeItem("countdownThahan");
   }
 
-  const ruleLabel = result.specialCase ? "กรณีพิเศษ / ขาดทหาร · บังคับนับ 2 ปี" : `ปลด ${formatThaiDate(result.endDate)}`;
+  const ruleLabel = result.specialCase ? t.specialRule : `${t.discharge} ${formatThaiDate(result.endDate)}`;
   serviceLabel.textContent = `${branchNames[result.branch]} · ${result.batch.label} · ${ruleLabel}`;
   calculatorSection.hidden = true;
   dashboardSection.hidden = false;
@@ -271,16 +363,16 @@ function drawShareCard() {
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "800 54px system-ui, sans-serif";
-  ctx.fillText("CountDownทหาร", 86, 128);
+  ctx.fillText(t.shareTitle, 86, 128);
   ctx.font = "600 34px system-ui, sans-serif";
   ctx.fillStyle = "#aee6d0";
   ctx.fillText(`${branchNames[currentResult.branch]} · ${currentResult.batch.label}`, 86, 184);
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "900 154px system-ui, sans-serif";
-  ctx.fillText(currentResult.serviceMonths === 0 ? "ยกเว้น" : `${remainingDays}`, 86, 440);
+  ctx.fillText(currentResult.serviceMonths === 0 ? t.shareExempt : `${remainingDays}`, 86, 440);
   ctx.font = "800 56px system-ui, sans-serif";
-  ctx.fillText(currentResult.serviceMonths === 0 ? "โปรดตรวจสอบเอกสาร" : "วันถึงปลดประจำการ", 96, 520);
+  ctx.fillText(currentResult.serviceMonths === 0 ? t.shareExemptNote : t.shareDaysToDischarge, 96, 520);
 
   ctx.fillStyle = "rgba(255,255,255,0.18)";
   ctx.fillRect(86, 660, 908, 44);
@@ -288,26 +380,26 @@ function drawShareCard() {
   ctx.fillRect(86, 660, 908 * (percent / 100), 44);
   ctx.fillStyle = "#ffffff";
   ctx.font = "800 46px system-ui, sans-serif";
-  ctx.fillText(`รับราชการแล้ว ${percent.toFixed(5)}%`, 86, 790);
+  ctx.fillText(`${t.shareServed} ${percent.toFixed(5)}%`, 86, 790);
 
   ctx.font = "600 34px system-ui, sans-serif";
   ctx.fillStyle = "#d8f3e9";
-  ctx.fillText(`เข้า: ${formatThaiDate(currentResult.startDate)}`, 86, 890);
-  ctx.fillText(`ปลด: ${formatThaiDate(currentResult.endDate)}`, 86, 946);
-  ctx.fillText(`สิทธิ: ${currentResult.specialCase ? "กรณีพิเศษ / ขาดทหาร · นับ 2 ปี" : educationNames[currentResult.education]}`, 86, 1002);
+  ctx.fillText(`${t.shareStart}: ${formatThaiDate(currentResult.startDate)}`, 86, 890);
+  ctx.fillText(`${t.shareEnd}: ${formatThaiDate(currentResult.endDate)}`, 86, 946);
+  ctx.fillText(`${t.shareRight}: ${currentResult.specialCase ? t.specialShare : educationNames[currentResult.education]}`, 86, 1002);
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "800 38px system-ui, sans-serif";
-  ctx.fillText("บันทึกไว้ให้แฟนทหารดู แล้วนับไปด้วยกัน", 86, 1126);
+  ctx.fillText(t.shareLove, 86, 1126);
   ctx.font = "600 28px system-ui, sans-serif";
   ctx.fillStyle = "#aee6d0";
-  ctx.fillText("วันจริงควรตรวจสอบกับหน่วยหรือเอกสารราชการอีกครั้ง", 86, 1182);
+  ctx.fillText(t.shareDisclaimer, 86, 1182);
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
   ctx.fillRect(86, 1236, 908, 70);
   ctx.fillStyle = "#ffffff";
   ctx.font = "800 32px system-ui, sans-serif";
-  ctx.fillText("คำนวณวันปลดทหารได้ที่", 116, 1280);
+  ctx.fillText(t.shareUrlLabel, 116, 1280);
   ctx.fillStyle = "#f4b942";
   ctx.font = "900 34px system-ui, sans-serif";
   ctx.fillText(siteUrl.replace("https://", ""), 522, 1280);
@@ -315,7 +407,7 @@ function drawShareCard() {
   const imageUrl = shareCanvas.toDataURL("image/png");
   downloadCard.href = imageUrl;
   downloadCard.hidden = false;
-  downloadCard.textContent = "ดาวน์โหลดรูปแชร์ PNG";
+  downloadCard.textContent = t.download;
   downloadCardModal.href = imageUrl;
   sharePreview.src = imageUrl;
   shareModal.hidden = false;
@@ -348,9 +440,9 @@ saveFavoriteButton.addEventListener("click", () => {
     rememberInfoInput.checked = true;
     saveState(currentResult);
   }
-  saveFavoriteButton.textContent = "บันทึกแล้ว เปิดดูได้ทุกวัน";
+  saveFavoriteButton.textContent = t.saved;
   setTimeout(() => {
-    saveFavoriteButton.textContent = "บันทึกไว้ให้แฟนทหารดู";
+    saveFavoriteButton.textContent = t.saveButton;
   }, 2200);
 });
 
@@ -365,15 +457,11 @@ shareModal.addEventListener("click", (event) => {
 });
 
 languageToggle.addEventListener("click", () => {
-  const nextLanguage = localStorage.getItem("countdownThahanLanguage") === "en" ? "th" : "en";
-  localStorage.setItem("countdownThahanLanguage", nextLanguage);
-  languageToggle.textContent = nextLanguage === "en" ? "EN / TH" : "TH / EN";
-  languageToggle.title = nextLanguage === "en" ? "English version reserved" : "ภาษาไทย";
+  if (languageToggle.dataset.href) {
+    window.location.href = languageToggle.dataset.href;
+    return;
+  }
+  window.location.href = pageLang === "en" ? "index.html" : "en.html";
 });
-
-if (localStorage.getItem("countdownThahanLanguage") === "en") {
-  languageToggle.textContent = "EN / TH";
-  languageToggle.title = "English version reserved";
-}
 
 restoreState();

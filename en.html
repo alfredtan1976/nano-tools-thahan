@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thai Military Countdown | Discharge Date Calculator</title>
+    <meta
+      name="description"
+      content="Calculate Thai military conscription discharge dates by branch, batch, enlistment type, education reduction, Ror Dor status, payday, and leave date."
+    />
+    <meta
+      name="keywords"
+      content="Thai military discharge calculator, Thailand conscription countdown, Thai draft 2026, Ror Dor, red card draft, Thai conscript service"
+    />
+    <link rel="canonical" href="https://thahan.nano-tools.net/en.html" />
+    <meta property="og:title" content="Thai Military Countdown | Discharge Date Calculator" />
+    <meta
+      property="og:description"
+      content="A mobile-first Thai conscription discharge countdown tool for conscripts, partners, and families."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://thahan.nano-tools.net/en.html" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-lang="en">
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">ThaiGoondori · English</p>
+        <h1>Thai Military Countdown</h1>
+        <p class="tagline">Discharge countdown for Thai conscripts, partners, and families</p>
+      </div>
+      <div class="header-actions">
+        <button class="language-toggle" id="languageToggle" type="button" data-href="index.html" aria-label="Switch to Thai">EN / TH</button>
+        <button class="ghost-button" id="resetButton" type="button" hidden>Calculate again</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="ad-slot ad-top" aria-label="Advertisement area"></div>
+
+      <section class="calculator-section" id="calculatorSection">
+        <div class="section-heading">
+          <p class="eyebrow">The Selector</p>
+          <h2>Choose your details to calculate discharge date</h2>
+        </div>
+
+        <form id="serviceForm" class="service-form">
+          <label>
+            <span>Military branch</span>
+            <select id="branch" name="branch">
+              <option value="army">Royal Thai Army</option>
+              <option value="navy">Royal Thai Navy</option>
+              <option value="airforce">Royal Thai Air Force</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Batch / entry date</span>
+            <select id="batch" name="batch"></select>
+          </label>
+
+          <label>
+            <span>Entry year</span>
+            <input id="entryYear" name="entryYear" type="number" min="2020" max="2035" />
+          </label>
+
+          <label>
+            <span>Entry type</span>
+            <select id="entryType" name="entryType">
+              <option value="lottery">Red card draft</option>
+              <option value="volunteer">Voluntary enlistment</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Education / Ror Dor status</span>
+            <select id="education" name="education">
+              <option value="basic">High school or lower / no reduction</option>
+              <option value="degree">Diploma / bachelor's degree</option>
+              <option value="rordor2">Completed Ror Dor year 2</option>
+              <option value="rordor3">Completed Ror Dor year 3+</option>
+            </select>
+            <small class="field-note">Education documents must be submitted on draft selection day to qualify for reduction.</small>
+          </label>
+
+          <label class="special-case">
+            <input id="specialCase" name="specialCase" type="checkbox" />
+            <span>
+              Special case / absent from draft
+              <small>Absence, late reporting, or draft evasion may force a 2-year term with no education reduction.</small>
+            </span>
+          </label>
+
+          <label>
+            <span>Payday</span>
+            <select id="payday" name="payday">
+              <option value="25">Every 25th</option>
+              <option value="26">Every 26th</option>
+              <option value="27">Every 27th</option>
+              <option value="28">Every 28th</option>
+              <option value="30">Every 30th</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Leave / important date</span>
+            <input id="leaveDate" name="leaveDate" type="date" />
+          </label>
+
+          <label class="remember-option">
+            <input id="rememberInfo" name="rememberInfo" type="checkbox" />
+            <span>
+              Remember my details
+              <small>Next time, open the dashboard directly.</small>
+            </span>
+          </label>
+
+          <button class="primary-button" type="submit">Start countdown</button>
+        </form>
+
+        <div class="ad-slot ad-native" aria-label="Advertisement area"></div>
+      </section>
+
+      <section class="dashboard-section" id="dashboardSection" hidden>
+        <div class="hero-countdown">
+          <p class="eyebrow" id="serviceLabel">Discharge date</p>
+          <h2 id="daysLeft">000 days</h2>
+          <p id="timeLeft">00 hours 00 minutes 00 seconds</p>
+        </div>
+
+        <div class="ad-slot ad-mrec" aria-label="Advertisement area"></div>
+
+        <div class="progress-area">
+          <div class="progress-copy">
+            <span>Service completed</span>
+            <strong id="servedPercent">0.00000%</strong>
+          </div>
+          <div class="progress-bar" aria-label="Military service progress">
+            <div id="progressFill"></div>
+          </div>
+          <div class="progress-copy muted">
+            <span id="elapsedLabel">Elapsed 0 days</span>
+            <span id="remainingLabel">Remaining 0 days</span>
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <article>
+            <span>Current status</span>
+            <strong id="rankLabel">New conscript</strong>
+          </article>
+          <article>
+            <span>Next payday</span>
+            <strong id="paydayLabel">-</strong>
+          </article>
+          <article>
+            <span>Leave date</span>
+            <strong id="leaveLabel">Not set</strong>
+          </article>
+        </div>
+
+        <div class="actions">
+          <button class="primary-button" id="shareCardButton" type="button">Create share image</button>
+          <button class="secondary-button" id="saveFavoriteButton" type="button">Save for my partner/family</button>
+        </div>
+
+        <canvas id="shareCanvas" width="1080" height="1350" hidden></canvas>
+        <a id="downloadCard" class="download-link" download="thai-military-countdown.png" hidden>Download PNG</a>
+      </section>
+
+      <section class="seo-section" id="seoSection">
+        <div class="section-heading">
+          <p class="eyebrow">Guide 2026</p>
+          <h2>Quick guide for Thai conscripts and families</h2>
+        </div>
+        <article>
+          <h3>What affects a Thai military discharge date?</h3>
+          <p>
+            The main factors are military branch, entry batch, entry type, education documents, Ror Dor training, and any special case such as absence from draft selection.
+          </p>
+        </article>
+        <article>
+          <h3>When do Thai conscription batches start?</h3>
+          <p>
+            The Army and Air Force usually use Batch 1 on May 1 and Batch 2 on November 1. The Navy can use four batches: May 1, August 1, November 1, and February 1.
+          </p>
+        </article>
+        <article>
+          <h3>For partners and families</h3>
+          <p>
+            Save the conscript's details once and reopen the site anytime to track the countdown together.
+          </p>
+        </article>
+      </section>
+
+      <section class="blog-section" id="blogSection">
+        <div class="section-heading">
+          <p class="eyebrow">Blog</p>
+          <h2>Recommended articles in English</h2>
+        </div>
+        <div class="blog-grid">
+          <a class="blog-card" href="blog-en.html#service-reduction">
+            <span>Guide</span>
+            <h3>Thai conscription 2026: service reductions by education and Ror Dor</h3>
+            <p>Understand the 6-month, 1-year, and 2-year service rules.</p>
+          </a>
+          <a class="blog-card" href="blog-en.html#discharge-date">
+            <span>Countdown</span>
+            <h3>When do Batch 1 and Batch 2 conscripts discharge?</h3>
+            <p>How discharge dates are counted for Thai military conscripts.</p>
+          </a>
+          <a class="blog-card" href="blog-en.html#military-documents">
+            <span>Documents</span>
+            <h3>What are Sor Dor 9, Sor Dor 35, and Sor Dor 43?</h3>
+            <p>Key documents for Thai draft registration and employment proof.</p>
+          </a>
+          <a class="blog-card" href="blog-en.html#salary-benefits">
+            <span>Benefits</span>
+            <h3>Thai conscript salary and benefits in 2026</h3>
+            <p>Payday, allowance, welfare, and education opportunities.</p>
+          </a>
+          <a class="blog-card" href="blog-en.html#postponement-health">
+            <span>Rights</span>
+            <h3>Student postponement and medical exemptions</h3>
+            <p>How students and medical cases should prepare before draft day.</p>
+          </a>
+          <a class="blog-card" href="blog-en.html#lgbtq-guide">
+            <span>LGBTQ+</span>
+            <h3>Thai military draft guide for LGBTQ+ and trans women</h3>
+            <p>Documents, privacy, and respectful reporting on selection day.</p>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <aside class="sticky-ad" aria-label="Advertisement area"></aside>
+
+    <div class="share-modal" id="shareModal" hidden role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="share-modal-panel">
+        <button class="modal-close" id="closeShareModal" type="button" aria-label="Close">×</button>
+        <h2 id="shareModalTitle">Share image</h2>
+        <p class="share-save-tip">Press and hold the image to save or share with friends</p>
+        <img id="sharePreview" alt="Thai military countdown share card" />
+        <a id="downloadCardModal" class="download-link fallback-download" download="thai-military-countdown.png">Download PNG</a>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>
+        Thai Military Countdown is a digital tool for Thai conscription discharge date calculation.
+        Website: <a href="https://thahan.nano-tools.net/">thahan.nano-tools.net</a>
+      </p>
+      <nav aria-label="Website links">
+        <a href="privacy-en.html">Privacy Policy</a>
+        <a href="terms-en.html">Terms</a>
+        <a href="about-en.html">About Us</a>
+        <a href="contact-en.html">Contact Us</a>
+        <a href="blog-en.html">Blog</a>
+      </nav>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
